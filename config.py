@@ -23,6 +23,7 @@ OUTBOUND_EMAIL_RECIPIENTS: tuple = (
     "outbound@uvcpartners.com",
     "philipp.frauenstein@uvcpartners.com",
     "esteban.prado@uvcpartners.com",
+    "joyce.galang@uvcpartners.com"
 )
 
 # MongoDB connection (from .env)
