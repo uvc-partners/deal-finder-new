@@ -1,4 +1,4 @@
-# Deal Finder v1.4
+# Deal Finder
 
 Fetches recently funded UVC accounts from MongoDB, filters IOs, and uploads results to Google Sheets.
 
