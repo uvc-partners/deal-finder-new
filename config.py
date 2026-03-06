@@ -33,8 +33,29 @@ IO_COLLECTION_NAME: str = os.environ["IO_COLLECTION_NAME"]
 RECOMMENDATION_STACK_COLLECTION_NAME: str = os.environ["RECOMMENDATION_STACK_COLLECTION_NAME"]
 
 
-# Google Sheets: template to copy, destination folder, service account (from .env)
+# Google Sheets: template to copy, destination folder (from .env)
 GOOGLE_SHEETS_TEMPLATE_ID: str = os.environ["GOOGLE_SHEETS_TEMPLATE_ID"]
 GOOGLE_SHEETS_DESTINATION_FOLDER_ID: str = os.environ["GOOGLE_SHEETS_DESTINATION_FOLDER_ID"]
-SERVICE_ACCOUNT_FILE: str = os.environ["SERVICE_ACCOUNT_FILE"]
+
+# Email (for sending reports via Gmail SMTP)
+EMAIL_SENDER: str = os.environ["EMAIL_SENDER"]
+EMAIL_APP_PASSWORD: str = os.environ["EMAIL_APP_PASSWORD"]
+
+# Google auth: "oauth" (recommended) or "service_account"
+# OAuth: files are owned by the authenticated user (e.g. uvc.data.team@gmail.com)
+# Service account: use only with impersonate_user or Shared Drives
+GOOGLE_AUTH_MODE: str = os.environ.get("GOOGLE_AUTH_MODE", "oauth")
+
+# OAuth (when GOOGLE_AUTH_MODE=oauth) - base64-encoded JSON from .env
+GOOGLE_OAUTH_CLIENT_SECRETS_B64: str = os.environ.get(
+    "GOOGLE_OAUTH_CLIENT_SECRETS_B64", ""
+)
+GOOGLE_OAUTH_TOKEN_B64: str = os.environ.get("GOOGLE_OAUTH_TOKEN_B64", "")
+
+# Service account (when GOOGLE_AUTH_MODE=service_account)
+# Base64 of service account JSON, or path via SERVICE_ACCOUNT_FILE
+SERVICE_ACCOUNT_B64: str = os.environ.get("SERVICE_ACCOUNT_B64", "")
+SERVICE_ACCOUNT_FILE: str = os.environ.get("SERVICE_ACCOUNT_FILE", "")
+# Optional: impersonate a Workspace user (domain-wide delegation)
+GOOGLE_IMPERSONATE_USER: str = os.environ.get("GOOGLE_IMPERSONATE_USER", "")
 

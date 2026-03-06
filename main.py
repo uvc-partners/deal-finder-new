@@ -5,6 +5,7 @@ was within the last time_delta days (default: 30).
 Uses the salesforce_accounts collection in UVC_Master_DB.
 """
 
+import os
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
@@ -213,7 +214,7 @@ def reformat_for_google_sheets(df: pd.DataFrame) -> pd.DataFrame:
     """
     if df.empty:
         return df
-    df_clean = df.fillna("").infer_objects(copy=False).astype(str)
+    df_clean = df.fillna("").infer_objects().astype(str)
 
     valid = build_valid_mapping(list(df_clean.columns))
     if not valid:
@@ -295,19 +296,23 @@ def run():
         print(f"Link to the new sheet: {new_sheet_url}")
 
     # --- Send email with link to Google Sheets ---
-    # send_to_outbound = input("Send email to outbound? Y/N: ")
-    # if send_to_outbound == "y" or send_to_outbound == "Y":
-    #     if new_sheet_url:
-    #         send_email_with_link(
-    #             list(OUTBOUND_EMAIL_RECIPIENTS),
-    #             new_sheet_url,
-    #             df_final,
-    #         )
+    # In CI (e.g. GitHub Actions), use SEND_EMAIL_TO_OUTBOUND env var to skip interactive prompt
+    send_to_outbound = os.environ.get("SEND_EMAIL_TO_OUTBOUND")
+    if send_to_outbound is None:
+        send_to_outbound = input("Send email to outbound? Y/N: ")
+    if send_to_outbound and str(send_to_outbound).upper() == "Y":
+        if new_sheet_url:
+            send_email_with_link(
+                # list(OUTBOUND_EMAIL_RECIPIENTS),
+                ["esteban.prado@uvcpartners.com"],
+                new_sheet_url,
+                df_final,
+            )
 
-    #     df_recommendations = filtered_ios[["Account__c"]].copy()
-    #     df_recommendations["df_v1_4_recommendation_date"] = datetime.today()
-    #     _upload_recommendation_stack_to_mongodb(df_recommendations)
-    #     print("Recommendation stack updated in MongoDB.")
+        df_recommendations = filtered_ios[["Account__c"]].copy()
+        df_recommendations["df_recommendation_date"] = datetime.today()
+        # _upload_recommendation_stack_to_mongodb(df_recommendations)
+        print("Recommendation stack updated in MongoDB.")
 
 if __name__ == "__main__":
     run()

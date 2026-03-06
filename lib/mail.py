@@ -1,23 +1,22 @@
-import json
+import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import builtins
+
+from dotenv import load_dotenv
 
 from lib.utils import *
+
+load_dotenv()
 
 
 def get_today_str():
     return datetime.today().strftime('%Y-%m-%d')
 
 
-# Email configuration
-# Read email configuration from JSON file
-with builtins.open("./config/email_config.json", 'r', encoding='utf-8') as email_config:
-    email_config = json.load(email_config)
-
-sender_email = email_config['sender_email']
-password = email_config['password']
+# Email configuration (from .env)
+sender_email = os.environ["EMAIL_SENDER"]
+password = os.environ["EMAIL_APP_PASSWORD"]
 
 
 #  CC addresses must be a comma-separated string: "email1@gmail.com, email2@gmail.com, etc@gmail.com"
@@ -47,14 +46,13 @@ def send_email(receiver_emails, subject, html_content, cc_emails=None):
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
             server.login(sender_email, password)
             server.sendmail(sender_email, all_recipients, msg.as_string())
-        # print_log(f"Email to {receiver_emails} sent successfully")
     except Exception as e:
-        pass
-        # print_log(f'Failed to send email: {e}')
+        print(f"Failed to send email: {e}")
+        raise
 
 
 def get_html_file(file_path):
-    with builtins.open(file_path, 'r', encoding='utf-8') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
         file = file.read()
     return file
 
