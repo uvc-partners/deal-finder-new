@@ -14,3 +14,4 @@ config/startup-data-analytics-*.json
 config/oauth_token.json
 config/oauth_client_secrets.json
 config/deal-finder-backend-*.json
+.DS_Store
